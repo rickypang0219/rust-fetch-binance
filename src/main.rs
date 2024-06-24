@@ -25,17 +25,24 @@ async fn main() -> Result<(), Error> {
         ("pair", "BTCUSDT"),
         ("contractType", "PERPETUAL"),
         ("interval", "1m"),
-        ("limit", "1"),
+        ("limit", "2"),
+        ("StartTime", "2024-06-23"),
     ];
-    let response: Vec<FuturePrice> = client
-        .get("https://fapi.binance.com/fapi/v1/continuousKlines")
-        .query(&params)
-        .send()
-        .await?
-        .json()
-        .await?;
 
-    println!("Response: {:#?}", response);
+    let mut full_response = Vec::new();
+    for _i in 0..2 {
+        let response: Vec<FuturePrice> = client
+            .get("https://fapi.binance.com/fapi/v1/continuousKlines")
+            .query(&params)
+            .send()
+            .await?
+            .json()
+            .await?;
+        // println!("Response: {:#?}", response);
+        full_response.extend(response);
+    }
+
+    println!("{:#?}", full_response);
 
     Ok(())
 }
