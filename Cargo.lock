@@ -138,6 +138,7 @@ name = "fetch-binance"
 version = "0.1.0"
 dependencies = [
  "reqwest",
+ "serde",
  "tokio",
 ]
 
