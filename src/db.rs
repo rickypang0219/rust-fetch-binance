@@ -18,7 +18,7 @@ pub struct FuturePrice {
 }
 
 pub fn convert_futures_data_dataframe(
-    future_data: Vec<FuturePrice>,
+    future_data: &Vec<FuturePrice>,
 ) -> Result<polars::prelude::DataFrame, PolarsError> {
     let timestamp: Vec<i64> = future_data.iter().map(|f| f.timestamp.clone()).collect();
     let open: Vec<f64> = future_data

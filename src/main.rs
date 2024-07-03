@@ -7,6 +7,6 @@ use scraper::fetch_futures_data;
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let response = fetch_futures_data().await?;
-    let futures_df = convert_futures_data_dataframe(response);
-    Ok(println!("{:#?}", futures_df))
+    let futures_df = convert_futures_data_dataframe(&response);
+    Ok(println!("{:#?}", &futures_df))
 }
