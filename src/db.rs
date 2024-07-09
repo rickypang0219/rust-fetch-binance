@@ -1,4 +1,5 @@
 use polars::prelude::{df, PolarsError};
+use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -15,6 +16,28 @@ pub struct FuturePrice {
     taker_buy_volume: String,
     taker_buy_quote_asset_volume: String,
     ignore: String,
+}
+
+impl FuturePrice {
+    pub async fn fetch() -> Result<Vec<Self>, Error> {
+        let client = reqwest::Client::new();
+        let params = [
+            ("pair", "BTCUSDT"),
+            ("contractType", "PERPETUAL"),
+            ("interval", "1m"),
+            ("limit", "1500"),
+            ("StartTime", "2024-06-23"),
+        ];
+
+        let response: Vec<Self> = client
+            .get("https://fapi.binance.com/fapi/v1/continuousKlines")
+            .query(&params)
+            .send()
+            .await?
+            .json()
+            .await?;
+        Ok(response)
+    }
 }
 
 pub fn convert_futures_data_dataframe(
